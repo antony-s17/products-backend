@@ -1,10 +1,11 @@
 import express from 'express';
 import { getAllProductsController, getProductByIdController, createProductController, updateProductController, deleteProductController } from '../controllers/products.js';
+import validateProductsMiddleware from '../middleware/validateProduct.js';
 
 const router = express.Router();
 
 router.get('/', getAllProductsController);
-router.post('/', createProductController);
+router.post('/', validateProductsMiddleware, createProductController);
 router.delete('/:id', deleteProductController);
 router.put('/:id', updateProductController);
 router.get('/:id', getProductByIdController);

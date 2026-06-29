@@ -1,52 +1,33 @@
-import products from '../db/products.js';
+import prisma from '../db/config.js';
+import { cleanData } from '../utils/utils.js';
+import CError, { Selector } from '../misc/errors.js';
+
+const attributes = ['id', 'createdAt', 'updatedAt'];
+
+const createProduct = async (product) => {
+    return await prisma.product.create({ data: product })    
+}
 
 const getAllProducts = async () => {
-    return products;
+    const response = await prisma.product.findMany({ orderBy: { name: "asc"  } });
+    return response.map(cleanData(...attributes));
 }
 
 const getProductById = async (id) => {
-    const product = products.find((product) => product.id === parseInt(id));
-    return product;
-}
-
-const createProduct = async (data) => {
-    if (data.price < 0 || data.stock < 0) {
-        throw new Error('Price and stock must be greater than or equal to 0');
+    const response = await prisma.product.findUnique({ where: {id: id }})
+    if (!response) {
+        throw new CError(Selector.NOT_FOUND);
     }
-    const newProductId = products.length + 1;
-    const newProduct = {
-        id: newProductId,
-        name: data.name,
-        category: data.category,
-        price: data.price,
-        stock: data.stock,
-        brand: data.brand
-    }
-    products.push(newProduct);
-    return products;
+    return cleanData(...attributes)(response);
 }
 
 const updateProduct = async (id, data) => {
-    let product = await getProductById(id);
-    if (!product) {
-        return null;
-    }
-    product = {
-        name: data.name || product.name,
-        category: data.category || product.category,
-        price: data.price || product.price,
-        stock: data.stock || product.stock,
-        brand: data.brand || product.brand
-    }
-    return product;
+    const productUpdate = await prisma.product.update({ where: { id } , data});
+    return cleanData(...attributes)(productUpdate);
 }
 
 const deleteProduct = async (id) => {
-    const product = await getProductById(id);
-    if (!product) {
-        return null;
-    }
-    return products.filter((product) => product.id !== parseInt(id));
+    return await prisma.product.delete({where: { id }})
 }
 
 export {

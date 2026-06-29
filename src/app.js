@@ -1,5 +1,7 @@
 import express from 'express';
 import productRouter from './routes/products.js';
+import errorHandler from './middleware/errorHandler.js';
+import notFoundMiddleware from './middleware/notFound.js';
 
 const app = express();
 
@@ -22,18 +24,10 @@ app.use('/api/products', productRouter);
 
 
 
-// Not found route
-app.use((req, res) => {
-    res.status(404).json(
-        {
-            ok: false,
-            error: {
-                code: 'ROUTE_NOT_FOUND',
-                message: 'Not found'
-            }
-        }
-    )
-})
+// Not Found Middleware
+app.use(notFoundMiddleware);
+// Error Middleware
+app.use(errorHandler);
 
 
 export default app;

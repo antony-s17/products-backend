@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch src/server.js",
+    "start": "node server.js",
+    "dev": "node --env-file=.env --watch src/server.js",
+    "prisma:gen": "pnpm dlx prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,7 +22,8 @@
   },
   "homepage": "https://github.com/antony-s17/products-backend#readme",
   "dependencies": {
-    "dotenv": "^17.4.2",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "express": "5.2.1"
   },
   "devDependencies": {
