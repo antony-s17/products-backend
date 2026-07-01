@@ -1,4 +1,4 @@
-import prisma from '../db/config.js';
+import { prisma } from '../db/config.js';
 import { cleanData } from '../utils/utils.js';
 import CError, { Selector } from '../misc/errors.js';
 

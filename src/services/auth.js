@@ -1,5 +1,5 @@
 import { compare } from "bcrypt";
-import prisma from "../db/config.js"
+import { prisma } from "../db/config.js"
 import CError, { Selector } from "../misc/errors.js";
 import { cleanData, encrypt } from "../utils/utils.js"
 import { sign } from "../utils/jwt.js";

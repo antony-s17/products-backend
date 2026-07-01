@@ -11,8 +11,8 @@ const createUser = async (req, res, next) => {
             data: user
         })
     } catch (error) {
-        if (error.code === 'P2002') {
-            return next(new CError(Selector.CONFLICT))
+        if (error.code == 'P2002') {
+            return next(new CError(Selector.USER_EXIST))
         }
         return next(error);
     } 
