@@ -1,7 +1,11 @@
 export const Selector = {
     NOT_FOUND: "notFound",
     BAD_INPUT:"badInput",
-    BAD_ERROR:"badError"
+    BAD_ERROR:"badError",
+    USER_EXIST:"userExists",
+    WRONG_CRED:"wrongCredentials",
+    USR_NOTFOUND:"userNotFound",
+    UNATHORIZED:"unauthorized"
 }
 
 const errors = {
@@ -16,6 +20,22 @@ const errors = {
     [Selector.BAD_INPUT]: {
         statusCode:400,
         message: 'invalid input'
+    },
+    [Selector.USER_EXIST]: {
+        statusCode:409,
+        message: 'user already exists'
+    },
+    [Selector.WRONG_CRED]: {
+        statusCode:400,
+        message: 'incorrect credentials'
+    },
+    [Selector.USR_NOTFOUND]: {
+        statusCode:400,
+        message: 'user not found'
+    },
+    [Selector.UNATHORIZED]: {
+        statusCode:401,
+        message: 'unauthorized'
     }
 }
 
