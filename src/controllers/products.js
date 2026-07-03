@@ -16,15 +16,11 @@ const createProductController = async (req, res, next) => {
 }
 
 const getAllProductsController = async (req, res, next) => {
-    try {
-        const products = await getAllProducts();
-        return res.status(200).json({
-            ok: true,
-            data: products
-        })
-    } catch(error) {
-        return next(error);
-    }
+    const response = await getAllProducts();
+    return res.status(200).json({
+        ok: true,
+        data: response.data
+    })
 }
 
 const getProductByIdController = async (req, res, next) => {

@@ -13,8 +13,8 @@ const authenticate = (req, res, next) => {
         return next(new CError(Selector.UNATHORIZED))
     }
 
-    const { email, role } = user;
-    res.locals = { email, role };
+    const { id, email, role } = user;
+    res.locals = { id,email, role };
 
     next();
 }

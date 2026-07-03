@@ -20,7 +20,7 @@ const loginUser = async (email, password ) => {
     try {
         const user = await prisma.user.findUnique(
         {
-            select: {password: true, role: true },
+            select: {id: true, password: true, role: true },
             where: { email }
         });
         if (!user) {
@@ -32,7 +32,7 @@ const loginUser = async (email, password ) => {
         }
         const { role } = user;
 
-        const token = sign({ email, role });
+        const token = sign({ id: user.id, email, role });
 
         return token;
     } catch(error) {

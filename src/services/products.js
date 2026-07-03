@@ -8,9 +8,19 @@ const createProduct = async (product) => {
     return await prisma.product.create({ data: product })    
 }
 
-const getAllProducts = async () => {
-    const response = await prisma.product.findMany({ orderBy: { name: "asc"  } });
-    return response.map(cleanData(...attributes));
+const getAllProducts = async (productId) => {
+    try {
+        const response = await prisma.product.findMany({ select: { id: true,name: true, price: true }, where: {id: { in: productId }}});
+        return {
+            ok: true,
+            data: response
+        }
+    } catch (error) {
+        return {
+            ok: false,
+            data: []
+        }
+    }
 }
 
 const getProductById = async (id) => {
