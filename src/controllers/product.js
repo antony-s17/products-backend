@@ -1,4 +1,4 @@
-import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../services/products.js';
+import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../services/product.js';
 import { isValidUUID } from '../utils/utils.js';
 import CError, { Selector } from '../misc/errors.js';
 
