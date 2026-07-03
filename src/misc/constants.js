@@ -1,9 +1,10 @@
 const PORT = process.env.PORT;
 const DATABASE_URL = process.env.DATABASE_URL;
 const JWT_SECRET = process.env.JWT_SECRET;
-
+const MONGO_DB_URI = process.env.MONGO_DB_URI;
 export {
     PORT,
     DATABASE_URL,
-    JWT_SECRET
+    JWT_SECRET,
+    MONGO_DB_URI
 }
