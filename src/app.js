@@ -1,13 +1,19 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import productRouter from './routes/products.js';
-import userRouter from './routes/users.js';
+import productRouter from './routes/product.js';
+import userRouter from './routes/user.js';
 import authRouter from './routes/auth.js';
+import wishlistRouter from './routes/wishlist.js';
+import cartRouter from './routes/cart.js';
 import errorHandler from './middlewares/errorHandler.js';
 import notFoundMiddleware from './middlewares/notFound.js';
+import swaggerUI from 'swagger-ui-express';
+import swaggerSpec from './swagger.js';
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -24,11 +30,14 @@ app.get('/health', (req, res) => {
     );
 });
 
-app.use('/api/products', productRouter);
+app.use('/api/product', productRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/users/', userRouter);
+app.use('/api/user', userRouter);
+app.use('/api/wishlist', wishlistRouter);
+app.use('/api/cart', cartRouter);
 
-
+//Swagger
+app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Not Found Middleware
 app.use(notFoundMiddleware);
