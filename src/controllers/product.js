@@ -1,86 +1,82 @@
-import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../services/product.js';
+import { insertProduct, selectAllProducts, selectProductById, updateProduct, deleteProduct } from "../services/product.js";
 import { isValidUUID } from '../utils/utils.js';
 import CError, { Selector } from '../misc/errors.js';
 
-const createProductController = async (req, res, next) => {
-   try {
-        const { name, description, price, stock, imageUrl } = req.body;
-        const product = await createProduct({ name, description, price, stock, imageUrl });
-        return res.status(201).json({
-            ok: true,
-            data: product
-        });
-   } catch (error) {
-        return next(error);
-   }
+const createProduct = async (req, res, next) => {
+    const { name, description, price, stock, imageUrl } = req.body;
+    const response = await insertProduct({ name, description, price, stock, imageUrl });
+    if (!response.ok) {
+        return next(new CError(Selector.BAD_ERROR));
+    }
+    return res.status(201).json({
+        ok: true,
+        data: response.data
+    });
 }
 
-const getAllProductsController = async (req, res, next) => {
-    const response = await getAllProducts();
+const getAllProducts = async (req, res, next) => {
+    const response = await selectAllProducts();
+    if (!response.ok) {
+        return next(new CError(Selector.BAD_ERROR));
+    }
     return res.status(200).json({
         ok: true,
         data: response.data
     })
 }
 
-const getProductByIdController = async (req, res, next) => {
-    try {
-        if (!isValidUUID(req.params.id)) {
-            return next(new CError(Selector.BAD_INPUT));
-        }
-        const product = await getProductById(req.params.id);
-        if (!product) {
-            return next(new CError(Selector.NOT_FOUND));
-        }
-        return res.status(200).json({
-            ok: true,
-            data: product
-        })
-    } catch (error) {
-        return next(error);
+const getProductById = async (req, res, next) => {
+    if (!isValidUUID(req.params.id)) {
+        return next(new CError(Selector.BAD_INPUT));
     }
+    const response = await selectProductById(req.params.id);
+    if (!response.ok) {
+        return next(new CError(Selector.NOT_FOUND));
+    }
+    return res.status(200).json({
+        ok: true,
+        data: response.data
+    })
 }
 
-const updateProductController = async (req, res, next) => {
-    try {
-        if (!isValidUUID(req.params.id)) {
-            return next(new CError(Selector.BAD_INPUT));
-        }
-        const product = await updateProduct(req.params.id, req.body);
-        return res.status(200).json({
-            ok: true,
-            data: product
-        })
-    } catch(error) {
-        if (error.code === 'P2025') {
+const updateInfoProduct = async (req, res, next) => {
+    if (!isValidUUID(req.params.id)) {
+        return next(new CError(Selector.BAD_INPUT));
+    }
+    const response = await updateProduct(req.params.id, req.body);
+    if (!response.ok) {
+        if (response.data === 'P2025') {
             return next(new CError(Selector.NOT_FOUND));
         }
-        return next(error)
+        return next(new CError(Selector.BAD_ERROR));
     }
+    return res.status(200).json({
+        ok: true,
+        data: response
+    })
 }
 
-const deleteProductController = async (req, res, next) => {
-    try {
-        if (!isValidUUID(req.params.id)) {
-            return next(new CError(Selector.BAD_INPUT));
-        }
-        await deleteProduct(req.params.id);
-        return res.status(200).json({
-            ok: true,
-            message: 'Product deleted'
-        })
-    } catch (error) {
-        if (error.code === 'P2025') {
+const removeProduct = async (req, res, next) => {
+    if (!isValidUUID(req.params.id)) {
+        return next(new CError(Selector.BAD_INPUT));
+    }
+    const response = await deleteProduct(req.params.id);
+    if (!response.ok) {
+        if (response.data === 'P2025') {
             return next(new CError(Selector.NOT_FOUND));
         }
-        return next(error);
+        return next(new CError(Selector.BAD_ERROR));
     }
+    return res.status(200).json({
+        ok: true,
+        message: 'Product deleted'
+    })
 }
 
 export {
-    getAllProductsController,
-    getProductByIdController,
-    createProductController,
-    updateProductController,
-    deleteProductController
+    createProduct,
+    getAllProducts,
+    getProductById,
+    updateInfoProduct,
+    removeProduct
 }

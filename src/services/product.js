@@ -4,11 +4,21 @@ import CError, { Selector } from '../misc/errors.js';
 
 const attributes = ['id', 'createdAt', 'updatedAt'];
 
-const createProduct = async (product) => {
-    return await prisma.product.create({ data: product })    
+const insertProduct = async (product) => {
+    try {
+        const response = await prisma.product.create({ data: product });
+        return {
+            ok: true,
+            data: cleanData(...attributes)(response)
+        }  
+    } catch (error) {
+        return {
+            ok: false
+        }
+    } 
 }
 
-const getAllProducts = async (productId) => {
+const selectAllProducts = async (productId) => {
     try {
         const response = await prisma.product.findMany({ select: { id: true,name: true, price: true }, where: {id: { in: productId }}});
         return {
@@ -23,27 +33,54 @@ const getAllProducts = async (productId) => {
     }
 }
 
-const getProductById = async (id) => {
-    const response = await prisma.product.findUnique({ where: {id: id }})
-    if (!response) {
-        throw new CError(Selector.NOT_FOUND);
+const selectProductById = async (id) => {
+    try {
+        const response = await prisma.product.findUnique({ where: {id: id }})
+        if (!response) {
+            throw new CError("Product not found");
+        }
+        return {
+            ok: true,
+            data: cleanData(...attributes)(response)
+        }
+    } catch (error) {
+        return {
+            ok: false,
+            data: {}
+        }
     }
-    return cleanData(...attributes)(response);
 }
 
 const updateProduct = async (id, data) => {
-    const productUpdate = await prisma.product.update({ where: { id } , data});
-    return cleanData(...attributes)(productUpdate);
+    try {
+        const productUpdate = await prisma.product.update({ where: { id } , data});
+        return cleanData(...attributes)(productUpdate);
+    } catch (error) {
+        return {
+            ok: false,
+            data: error.code
+        }
+    }
 }
 
 const deleteProduct = async (id) => {
-    return await prisma.product.delete({where: { id }})
+    try {
+        await prisma.product.delete({where: { id }});
+        return {
+            ok: true
+        }
+    } catch (error) {
+        return {
+            ok: false,
+            data: error.code
+        }
+    }
 }
 
 export {
-    getAllProducts,
-    getProductById,
-    createProduct,
+    insertProduct,
+    selectAllProducts,
+    selectProductById,
     updateProduct,
     deleteProduct
 }
