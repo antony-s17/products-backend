@@ -6,6 +6,16 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum CartStatus {
+  ACTIVE
+  CHECKED_OUT
+}
+
 model Product {
   id String @id @default(uuid())
   name String
@@ -16,12 +26,10 @@ model Product {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("products")
-}
+  cartItems CartItem[]
+  orderItems OrderItem[]
 
-enum Role {
-  USER
-  ADMIN
+  @@map("products")
 }
 
 model User {
@@ -33,7 +41,69 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  carts Cart[]
+  orders Order[]
+
   @@map("users")
+}
+
+model Cart {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  status CartStatus @default(ACTIVE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
+
+  @@index([userId])
+  @@map("carts")
+}
+
+model CartItem {
+  id String @id @default(uuid())
+  cartId String @map("cart_id")
+  productId String @map("product_id")
+  quantity Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  cart Cart @relation(fields:[cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@unique([cartId, productId])
+  @@map("cartitems")
+}
+
+model Order {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  total Decimal @db.Decimal(10,2)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+
+  @@index([userId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+  orderId String @map("order_id")
+  productId String @map("product_id")
+  quantity Int
+  priceAtPurchase Decimal @db.Decimal(10,2)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
+  @@index([productId])
+  @@map("orderitems")
 }
 
 
