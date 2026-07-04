@@ -19,12 +19,13 @@ const encrypt = async (data) => {
     return await bcrypt.hash(data, salt);
 }
 
-const comparte = async (text, hashedtext) => {
+const compare = async (text, hashedtext) => {
     return await bcrypt.compare(text, hashedtext);
 } 
 
 export {
     isValidUUID,
     cleanData,
-    encrypt
+    encrypt,
+    compare
 }
