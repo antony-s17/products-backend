@@ -1,4 +1,7 @@
 allowBuilds:
   '@prisma/engines': true
+  '@scarf/scarf': true
+  aws-sdk: true
   bcrypt: true
   prisma: true
+  protobufjs: true
