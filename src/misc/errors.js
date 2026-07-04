@@ -3,6 +3,7 @@ export const Selector = {
     BAD_INPUT:"badInput",
     BAD_ERROR:"badError",
     USER_EXIST:"userExists",
+    PROD_EXIST:"prodExists", 
     WRONG_CRED:"wrongCredentials",
     USR_NOTFOUND:"userNotFound",
     UNATHORIZED:"unauthorized"
@@ -24,6 +25,10 @@ const errors = {
     [Selector.USER_EXIST]: {
         statusCode:409,
         message: 'user already exists'
+    },
+    [Selector.PROD_EXIST]: {
+        statusCode:409,
+        message: 'product already exists'
     },
     [Selector.WRONG_CRED]: {
         statusCode:400,
@@ -49,7 +54,7 @@ export default class CError extends Error {
     }
 
     _getError(errorType = Selector.BAD_ERROR) {
-        return errors[errorType] ?? this._geCustomMsg(errorType);
+        return errors[errorType] ?? this._getCustomMsg(errorType);
     }
 
     _getCustomMsg(message) {
