@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node src/server.js",
     "dev": "node --env-file=.env --watch src/server.js",
     "prisma:gen": "pnpm dlx prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
