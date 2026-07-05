@@ -53,6 +53,15 @@ pnpm install
 pnpm run dev
 ```
 
+## Demo Credentials
+
+To test the administrator features, use the following demo account:
+
+- **Email:** admin@gmail.com
+- **Password:** admin123*
+
+These credentials are provided for evaluation purposes only.
+
 Usage
 - Open `http://localhost:3000/api/docs` to view interactive API documentation.
 - Health check: `GET /health`
