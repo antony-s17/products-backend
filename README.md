@@ -73,3 +73,143 @@ The OpenAPI schemas are defined under `src/docs/schemas/` and referenced by `swa
 
 👨‍💻 Author
 GitHub: https://github.com/antony-s17
+
+---
+
+## API Endpoints
+
+Below are the main API endpoints, example requests and short descriptions. The full interactive docs are available at `/api/docs` once the server is running.
+
+Authentication
+
+- Register user
+
+  POST /api/auth/register
+
+  Request JSON:
+
+  ```json
+  {
+    "username": "jdoe",
+    "email": "jdoe@example.com",
+    "password": "strongpassword"
+  }
+  ```
+
+  Example curl:
+
+  ```bash
+  curl -X POST http://localhost:3000/api/auth/register \
+    -H "Content-Type: application/json" \
+    -d '{"username":"jdoe","email":"jdoe@example.com","password":"secret"}'
+  ```
+
+- Login
+
+  POST /api/auth/login
+
+  Request JSON:
+
+  ```json
+  {
+    "email": "jdoe@example.com",
+    "password": "secret"
+  }
+  ```
+
+  Example curl (response sets `access_token` cookie):
+
+  ```bash
+  curl -i -X POST http://localhost:3000/api/auth/login \
+    -H "Content-Type: application/json" \
+    -d '{"email":"jdoe@example.com","password":"secret"}'
+  ```
+
+- Logout
+
+  POST /api/auth/logout (requires authentication cookie)
+
+User
+
+- Get authenticated profile
+
+  GET /api/user/profile
+
+  Example curl:
+
+  ```bash
+  curl -b "access_token=..." http://localhost:3000/api/user/profile
+  ```
+
+Products
+
+- Get all products
+
+  GET /api/product
+
+- Create product (ADMIN)
+
+  POST /api/product
+
+  Body: `ProductCreate` schema (see OpenAPI or `src/docs/schemas/product.js`)
+
+- Get / Update / Delete by id
+
+  GET /api/product/{id}
+  PUT /api/product/{id}
+  DELETE /api/product/{id}
+
+Reviews
+
+- Create review for product
+
+  POST /api/product/{productId}/reviews
+
+- Get reviews for product
+
+  GET /api/product/{productId}/reviews
+
+Cart
+
+- Add item to cart
+
+  POST /api/cart
+
+  Body example:
+
+  ```json
+  { "productId": "<product-id>", "quantity": 1 }
+  ```
+
+- Get cart
+
+  GET /api/cart
+
+- Checkout
+
+  POST /api/cart/checkout
+
+Wishlist
+
+- Add product to wishlist
+
+  POST /api/wishlist
+
+  Body example:
+
+  ```json
+  { "productId": "<product-id>" }
+  ```
+
+- Get wishlist
+
+  GET /api/wishlist
+
+- Remove product from wishlist
+
+  DELETE /api/wishlist/{productId}
+
+Notes
+
+- All endpoints that require authentication expect the `access_token` cookie to be set. Use the `/api/auth/login` endpoint which sets the cookie on successful login.
+- For full request/response schemas consult the OpenAPI spec served at `/api/docs` or the JSON schemas inside `src/docs/schemas/`.
