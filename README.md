@@ -35,8 +35,8 @@ products-backend/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/antony-s17/products-backend.git
-cd products-backend
+git clone https://github.com/antony-s17/ecommerce-backend
+cd ecommerce-backend
 ```
 
 2. Install dependencies:
