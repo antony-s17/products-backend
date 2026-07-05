@@ -54,7 +54,10 @@ const selectProductById = async (id) => {
 const updateProduct = async (id, data) => {
     try {
         const productUpdate = await prisma.product.update({ where: { id } , data});
-        return cleanData(...attributes)(productUpdate);
+        return {
+            ok: true,
+            data: cleanData(...attributes)(productUpdate)
+        }
     } catch (error) {
         return {
             ok: false,
