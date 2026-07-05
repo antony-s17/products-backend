@@ -1,4 +1,4 @@
-import Wishlist from "../models/wishlist.js";
+import Wishlist from "../models/Wishlist.js";
 import { selectAllProducts } from "./product.js";
 
 const insertToWishList = async (id, productId) => {
