@@ -14,7 +14,7 @@ Backend API for a products e-commerce project. Implements product management, us
 - swagger-jsdoc + swagger-ui-express
 
 📂 Project structure
-
+```text
 products-backend/
 ├── src/
 │   ├── controllers/
@@ -30,6 +30,7 @@ products-backend/
 ├── prisma/
 ├── package.json
 └── README.md
+```
 
 ⚙️ Installation
 1. Clone the repository:
